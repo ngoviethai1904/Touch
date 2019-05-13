@@ -1,0 +1,72 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Data.SqlClient;
+using System.Data;
+using System.Windows.Forms;
+
+namespace BAITAPKIEMTRA
+{
+    class Funtions
+    {
+        public static SqlConnection conn; // ket noi du lieu
+        public static void Connect()
+        {
+            conn = new SqlConnection();
+            conn.ConnectionString = "Data Source=PC-11\\SQLEXPRESS;Initial Catalog=baitapkiemtra;Integrated Security=True";
+            conn.Open();
+            if (conn.State == ConnectionState.Open)
+                MessageBox.Show("K?t n?i thành công!");
+
+            else
+                MessageBox.Show("K?t n?i th?t b?i!");
+        }
+
+        public static void DisConnect()
+        {
+            if (conn.State == ConnectionState.Open)
+            {
+                conn.Close();
+                conn.Dispose();
+                conn = null;
+            }
+        }
+
+        public static void Disconn()
+        {
+            conn = new SqlConnection();
+            conn.ConnectionString = "Data Source=PC-11\\SQLEXPRESS;Initial Catalog=baitapkiemtra;Integrated Security=True";
+            conn.Open();
+            if (conn.State == ConnectionState.Open)
+            {
+                conn.Close();
+                conn.Dispose();
+                conn = null;
+            }
+        }
+
+        public static DataTable GetData(String Sql)
+        {
+            SqlDataAdapter Mydata = new SqlDataAdapter();
+            Mydata.SelectCommand = new SqlCommand();
+            Mydata.SelectCommand.Connection = conn;
+            Mydata.SelectCommand.CommandText = Sql;
+
+            DataTable table = new DataTable();
+            Mydata.Fill(table);
+
+            return table;
+        }
+
+        public static void runsql(string sql)
+        {
+            SqlCommand cmd = new SqlCommand(sql, conn);
+            cmd.Connection = conn;
+            cmd.CommandText = sql;
+            cmd.ExecuteNonQuery();
+
+        }
+    }
+}
